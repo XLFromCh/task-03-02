@@ -15,5 +15,13 @@
 
 3、请简述虚拟 DOM 中 Key 的作用和好处。
     
+    key 主要用在 Vue 的虚拟 DOM 算法，在新旧 nodes 对比时辨识 VNodes。如果不使用 key，Vue 会使用一种最大限度减少动态元素并且尽可能的尝试修复/再利用相同类型元素的算法。使用 key，它会基于 key 的变化重新排列元素顺序，并且会移除 key 不存在的元素。
+    key可以减少 dom 的操作，减少 diff 和渲染所需要的时间，提升了性能
 
 4、请简述 Vue 中模板编译的过程。
+
+   模板编译的入口是compileToFunction方法，先从缓存中加载编译好的render函数，如果缓存中没有render，则调用compile函数。
+   compile函数中先合并option，然后再调用baseCompile函数
+   baseCompile函数将template对象转换成ast抽象语法树，然后调用optimize方法对ast树进行优化，标记ast tree中的静态根节点，静态根节点不需要在每次渲染的时候重新生成。最后将优化过的ast对象转换成字符串并返回。
+   compileToFunction方法中继续将上一部的字符串形式代码转换成函数的形式，最后当render和staticRenderFns初始化完毕，挂载到vue示例的options对应属性中
+
